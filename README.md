@@ -154,7 +154,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: methorz.ansible-nginx-role }
+         - { role: methorz.nginx }
 
 License
 -------
