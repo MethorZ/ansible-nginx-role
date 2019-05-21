@@ -118,4 +118,3 @@ nginx_vhosts: []
 #              fastcgi_read_timeout 3600;
 #              fastcgi_param APPLICATION_ENV development;
 #      additional_conf: ""
-
