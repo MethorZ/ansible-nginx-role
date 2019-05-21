@@ -1,0 +1,55 @@
+---
+#
+# Configure managed vhosts
+#
+- block:
+  - name: FILE | Remove existing default vhost
+    file:
+      path: "{{ nginx_default_vhost }}"
+      state: absent
+    when: nginx_remove_default_vhost
+    notify: restart nginx
+
+  - name: FILE | Remove all existing vhosts (directory) before creation
+    file:
+      state: "{{ item }}"
+      path: "{{ nginx_vhost_dir }}"
+      owner: root
+      group: "{{ nginx_group }}"
+      mode: '0755'
+    with_items:
+      - absent
+      - directory
+    when: nginx_clear_vhosts_first
+
+  - name: FILE | Make sure the vhost directory exists
+    file:
+      path: "{{ nginx_vhost_dir }}"
+      state: directory
+    notify: reload nginx
+
+  - name: FILE | Remove disabled vhosts
+    file:
+      path: "{{ nginx_vhost_dir }}/{{ item.filename }}"
+      state: absent
+    when: item.state|default('present') == 'absent'
+    with_items: "{{ nginx_vhosts }}"
+    notify: reload nginx
+
+  - debug:
+      msg: item
+    with_items: "{{ nginx_vhosts }}"
+
+  - name: TEMPLATE | Create enabled vhosts
+    template:
+      src: vhost.j2
+      dest: "{{ nginx_vhost_dir }}/{{ item.filename }}"
+      force: true
+      owner: root
+      group: "{{ nginx_group }}"
+      mode: 0644
+    when: item.state|default('present') != 'absent'
+    with_items: "{{ nginx_vhosts }}"
+    notify: reload nginx
+
+  when: nginx_enabled and nginx_manage_vhosts

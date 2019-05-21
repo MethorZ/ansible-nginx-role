@@ -1,0 +1,66 @@
+---
+#
+# Default OS specific variable definitions / defaults
+#
+- name: INCLUDE_VARS | OS specific vars
+  include_vars: "{{ ansible_facts['os_family'] }}.yml"
+
+- name: FACTS - Define NGINX package
+  set_fact:
+    nginx_package: "{{ __nginx_package }}"
+  when: nginx_package is not defined
+
+- name: FACTS - Define NGINX conf directory
+  set_fact:
+    nginx_conf_dir: "{{ __nginx_conf_dir }}"
+  when: nginx_conf_dir is not defined
+
+- name: FACTS - Define NGINX enabled vhost directory
+  set_fact:
+    nginx_vhost_dir: "{{ __nginx_vhost_dir }}"
+  when: nginx_vhost_dir is not defined
+
+- name: FACTS - Define NGINX available vhost directory
+  set_fact:
+    nginx_available_vhost_dir: "{{ __nginx_available_vhost_dir }}"
+  when: nginx_available_vhost_dir is not defined
+
+- name: FACTS - Define NGINX default vhost
+  set_fact:
+    nginx_default_vhost: "{{ __nginx_default_vhost }}"
+  when: nginx_default_vhost is not defined
+
+- name: FACTS - Define NGINX default conf
+  set_fact:
+    nginx_default_conf: "{{ __nginx_default_conf }}"
+  when: nginx_default_conf is not defined
+
+- name: FACTS - Define NGINX fastcgi conf
+  set_fact:
+    nginx_fastcgi_conf: "{{ __nginx_fastcgi_conf }}"
+  when: nginx_fastcgi_conf is not defined
+
+- name: FACTS - Define NGINX mime types
+  set_fact:
+    nginx_mime_types: "{{ __nginx_mime_types }}"
+  when: nginx_mime_types is not defined
+
+- name: FACTS - Define NGINX bin
+  set_fact:
+    nginx_bin: "{{ __nginx_bin }}"
+  when: nginx_bin is not defined
+
+- name: FACTS - Define NGINX service / daemon
+  set_fact:
+    nginx_service: "{{ __nginx_service }}"
+  when: nginx_service is not defined
+
+- name: FACTS - Define NGINX user
+  set_fact:
+    nginx_user: "{{ __nginx_user }}"
+  when: nginx_user is not defined
+
+- name: FACTS - Define NGINX group
+  set_fact:
+    nginx_group: "{{ __nginx_group }}"
+  when: nginx_group is not defined

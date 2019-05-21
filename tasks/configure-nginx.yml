@@ -1,0 +1,26 @@
+---
+#
+# Configure NGINX for usage
+#
+- block:
+  - name: TEMPLATE | Copy managed nginx.conf template
+    template:
+      src: nginx-conf.j2
+      dest: "{{ nginx_default_conf }}"
+      owner: root
+      group: "{{ nginx_group }}"
+      mode: 0644
+    notify:
+      - reload nginx
+
+  - name: SERVICE | Make sure NGINX is started and enabled at boot (Debian).
+    service:
+      name: "{{ nginx_service }}"
+      state: started
+      enabled: true
+      use: service
+    when: ansible_facts['os_family'] == "Debian"
+
+  when: nginx_enabled
+
+

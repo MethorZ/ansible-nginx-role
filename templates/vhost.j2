@@ -1,0 +1,57 @@
+{% if item.redirect is defined %}
+server {
+    listen {{ item.redirect.listen }};
+    server_name {{ item.redirect.server_name }};
+    location /.well-known/acme-challenge/ {
+        alias /var/www/challenges/;
+        try_files $uri =404;
+    }
+    location / {
+        return 301 {{ item.redirect.target }}$request_uri;
+    }
+}
+{% endif %}
+
+server {
+    listen {{ item.listen }};
+    server_name {{ item.server_name }};
+
+{% if item.ssl is defined %}
+    ssl {{ item.ssl.enabled }};
+    ssl_certificate {{ item.ssl.cert }};
+    ssl_certificate_key {{ item.ssl.key }};
+{% endif %}
+
+    access_log {{ item.access_log }};
+    error_log {{ item.error_log }};
+
+    root {{ item.root }};
+
+    try_files {{ item.try_files }};
+    index {{ item.index | default('index.html index.htm') }};
+
+{% if item.locations is defined %}
+{% for entry in item.locations %}
+    location {{ entry.location }} {
+{% if entry.try_files is defined %}
+        try_files {{ entry.try_files }};
+{% endif %}
+{% if entry.fastcgi is defined %}
+{% if entry.fastcgi.pass is defined %}
+        fastcgi_pass {{ entry.fastcgi.pass }};
+{% endif %}
+{% if entry.fastcgi.index is defined %}
+        fastcgi_index {{ entry.fastcgi.index }};
+{% endif %}
+{% if entry.fastcgi.include_conf is defined %}
+        include {{ entry.fastcgi.include_conf }};
+{% endif %}
+{% endif %}
+{% if entry.additional_conf is defined %}
+        {{ entry.additional_conf }}
+{% endif %}
+    }
+
+{% endfor %}
+{% endif %}
+}

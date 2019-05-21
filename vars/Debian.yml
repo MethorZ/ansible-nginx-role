@@ -1,0 +1,40 @@
+---
+#
+# Default NGINX settings
+#
+
+# Nginx apt package
+__nginx_package: nginx
+
+# Default path to nginx conf directory
+__nginx_conf_dir: /etc/nginx/conf.d
+
+# Default path to enabled vhost configurations
+__nginx_vhost_dir: /etc/nginx/sites-enabled
+
+# Default path to available vhost configurations
+__nginx_available_vhost_dir: /etc/nginx/sites-available
+
+# Default vhost configuration
+__nginx_default_vhost: /etc/nginx/sites-enabled/default
+
+# Default nginx.conf path
+__nginx_default_conf: /etc/nginx/nginx.conf
+
+# Default fastcgi.conf path
+__nginx_fastcgi_conf: /etc/nginx/fastcgi.conf
+
+# Default mime.types path
+__nginx_mime_types: /etc/nginx/mime.types
+
+# Binary for nginx
+__nginx_bin: nginx
+
+# Nginx service / daemon
+__nginx_service: nginx
+
+# Default user for nginx
+__nginx_user: www-data
+
+# Default nginx group privilege
+__nginx_group: root

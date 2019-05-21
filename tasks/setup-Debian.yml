@@ -1,0 +1,13 @@
+---
+#
+# Setup all required packages
+#
+- name: APT | Updating the apt cache
+  apt:
+    update_cache: yes
+
+- name: APT | Make sure NGINX is installed
+  apt:
+    name: "{{ nginx_package }}"
+    state: "{{ nginx_packages_mode }}"
+  when: nginx_enabled

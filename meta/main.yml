@@ -1,0 +1,16 @@
+galaxy_info:
+  author: MethorZ
+  description: Ansible NGINX role for Debian. (Supports multiple vhosts)
+  company: MethorZ
+  license: license (BSD, MIT)
+  min_ansible_version: 2.5
+  platforms:
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - development
+    - web
+    - nginx
+
+dependencies: []

@@ -1,0 +1,73 @@
+user {{ nginx_user }};
+worker_processes {{ nginx_worker_processes }};
+pid {{ nginx_pid }};
+include {{ nginx_modules_dir }}/*.conf;
+
+{{ nginx_extra_conf_options }}
+
+events {
+    worker_connections {{ nginx_events_worker_connections }};
+    multi_accept {{ nginx_multi_accept }};
+}
+
+http {
+
+    ##
+    # Basic Settings
+    ##
+
+    sendfile {{ nginx_http_sendfile }};
+    tcp_nopush {{ nginx_http_tcp_nopush }};
+    tcp_nodelay {{ nginx_http_tcp_nodelay }};
+    keepalive_timeout {{ nginx_http_keepalive_timeout }};
+    types_hash_max_size {{ nginx_http_types_hash_max_size }};
+    server_tokens {{ nginx_http_server_tokens }};
+
+    server_names_hash_bucket_size 64;
+    server_name_in_redirect off;
+
+    include {{ nginx_mime_types }};
+    default_type {{ nginx_http_default_type }};
+
+    ##
+    # SSL Settings
+    ##
+
+    ssl_protocols {{ nginx_http_ssl_protocols }}; # Dropping SSLv3, ref: POODLE
+    ssl_prefer_server_ciphers {{ nginx_http_ssl_prefer_server_ciphers }};
+    ssl_ciphers {{ nginx_http_ssl_ciphers }};
+    ssl_session_cache {{ nginx_http_ssl_session_cache }};
+
+    ssl_stapling {{ nginx_http_ssl_stapling }};
+    resolver {{ nginx_http_resolver }};
+    resolver_timeout {{ nginx_resolver_timeout }};
+
+    ##
+    # Logging Settings
+    ##
+
+    access_log {{ nginx_http_access_log }};
+    error_log {{ nginx_http_error_log }};
+
+    ##
+    # Gzip Settings
+    ##
+
+    gzip {{ nginx_http_gzip }};
+    gzip_disable {{ nginx_http_gzip_disable }};
+
+    # gzip_vary on;
+    # gzip_proxied any;
+    # gzip_comp_level 6;
+    # gzip_buffers 16 8k;
+    # gzip_http_version 1.1;
+    # gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+    {{ nginx_extra_http_options }}
+    ##
+    # Virtual Host Configs
+    ##
+
+    include {{ nginx_conf_dir }}/*.conf;
+    include {{ nginx_vhost_dir }}/*;
+}

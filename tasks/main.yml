@@ -1,0 +1,21 @@
+---
+#
+# Import variable definitions and defaults
+#
+- name: IMPORT_TASKS | Setup Variable definitions / defaults
+  import_tasks: setup-variables.yml
+
+#
+# Setup the OS based on family
+#
+- name: IMPORT_TASKS | Setup NGINX for OS
+  import_tasks: "setup-Debian.yml"
+  when: nginx_enabled and ansible_facts['os_family'] == 'Debian'
+
+- name: IMPORT_TASKS | Configure NGINX
+  import_tasks: configure-nginx.yml
+  when: nginx_enabled
+
+- name: IMPORT_TASKS | Configure NGINX
+  import_tasks: configure-vhosts.yml
+  when: nginx_enabled and nginx_manage_vhosts
