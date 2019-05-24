@@ -4,7 +4,7 @@
 ##
 
 # Nginx package should be installed
-nginx_enabled: true
+nginx_enabled: false
 
 # Latest will install and update to latest versions, present will not update
 nginx_packages_mode: latest # present|latest
