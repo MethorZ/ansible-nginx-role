@@ -25,10 +25,16 @@ server {
     access_log {{ item.access_log }};
     error_log {{ item.error_log }};
 
+{% if item.root is defined %}
     root {{ item.root }};
 
+{% endif %}
+{% if item.try_files is defined %}
     try_files {{ item.try_files }};
-    index {{ item.index | default('index.html index.htm') }};
+{% endif %}
+{% if item.index is defined %}
+    index {{ item.index }};
+{% endif %}
 
 {% if item.locations is defined %}
 {% for entry in item.locations %}
