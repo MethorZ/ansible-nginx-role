@@ -7,7 +7,7 @@
 nginx_enabled: false
 
 # Latest will install and update to latest versions, present will not update
-nginx_packages_mode: latest # present|latest
+nginx_packages_mode: present # present|latest
 
 nginx_worker_processes: auto
 nginx_pid: /run/nginx.pid
@@ -95,6 +95,9 @@ nginx_vhosts: []
 #        target: https://example.tld
 #      listen: 1.2.3.4:443 ssl http2
 #      server_name: abc.tld
+#      sets:
+#        - $variable $1
+#        - $variable_next "some text"
 #      access_log: /var/log/nginx/access.tld.example.log
 #      error_log: /var/log/nginx/error.tld.example.log
 #      root: /home/user/project/public
