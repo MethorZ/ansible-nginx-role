@@ -16,7 +16,7 @@
   - name: SERVICE | Make sure NGINX is started and enabled at boot (Debian).
     service:
       name: "{{ nginx_service }}"
-      state: started
+      #state: started
       enabled: true
       use: service
     when: ansible_facts['os_family'] == "Debian"

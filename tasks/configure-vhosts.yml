@@ -40,6 +40,15 @@
       msg: item
     with_items: "{{ nginx_vhosts }}"
 
+  - name: COPY | Copy required certificate directory
+    copy:
+      src: "{{ item.ssl.src_dir }}"
+      dest: "{{ item.ssl.dest_dir }}"
+      owner: root
+      group: root
+      mode: '0755'
+    with_items: "{{ nginx_vhosts }}"
+
   - name: TEMPLATE | Create enabled vhosts
     template:
       src: vhost.j2

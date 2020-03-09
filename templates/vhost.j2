@@ -62,7 +62,10 @@ server {
         {{ entry.additional_conf }}
 {% endif %}
     }
-
 {% endfor %}
+{% if item.additional_conf is defined %}
+
+        {{ item.additional_conf }}
+{% endif %}
 {% endif %}
 }
