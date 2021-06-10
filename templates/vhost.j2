@@ -27,8 +27,12 @@ server {
     ssl_certificate_key {{ item.ssl.key }};
 {% endif %}
 
+{% if item.access_log is defined %}
     access_log {{ item.access_log }};
+{% endif %}
+{% if item.error_log is defined %}
     error_log {{ item.error_log }};
+{% endif %}
 
 {% if item.root is defined %}
     root {{ item.root }};
