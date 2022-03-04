@@ -2,10 +2,6 @@
 server {
     listen {{ item.redirect.listen }};
     server_name {{ item.redirect.server_name }};
-    location /.well-known/acme-challenge/ {
-        alias /var/www/challenges/;
-        try_files $uri =404;
-    }
     location / {
         return 301 {{ item.redirect.target }}$request_uri;
     }
@@ -22,7 +18,8 @@ server {
 {% endfor %}
 {% endif %}
 {% if item.ssl is defined %}
-    ssl {{ item.ssl.enabled }};
+# ssl is deprecated and should be set on the "listen .... ssl" line instead
+#    ssl {{ item.ssl.enabled }};
     ssl_certificate {{ item.ssl.cert }};
     ssl_certificate_key {{ item.ssl.key }};
 {% endif %}
