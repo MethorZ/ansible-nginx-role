@@ -18,8 +18,6 @@ server {
 {% endfor %}
 {% endif %}
 {% if item.ssl is defined %}
-# ssl is deprecated and should be set on the "listen .... ssl" line instead
-#    ssl {{ item.ssl.enabled }};
     ssl_certificate {{ item.ssl.cert }};
     ssl_certificate_key {{ item.ssl.key }};
 {% endif %}
@@ -66,7 +64,7 @@ server {
 {% endfor %}
 {% if item.additional_conf is defined %}
 
-        {{ item.additional_conf }}
+    {{ item.additional_conf }}
 {% endif %}
 {% endif %}
 }

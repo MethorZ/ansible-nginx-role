@@ -11,8 +11,6 @@ None
 ToDo's
 ------------
 
-- Check existence of vhost.ssl certificates before applying vhost configuration, as this leads to nginx not able to start.
-
 Role Variables
 --------------
 ```YAML
@@ -96,50 +94,64 @@ nginx_clear_vhosts_first: false
 # Removal of the default vhost shipped with nginx
 nginx_remove_default_vhost: false
 
-#Example for managed vhost list
-nginx_vhosts:
-  - example_project:
-      filename: example.conf
-      state: present # absent
-      
-      # Redirection to https
-      redirect:
-        listen: 1.2.3.4:80
-        server_name: example.tld
-        target: https://example.tld
-      
-      # Basic setup
-      listen: 1.2.3.4:443
-      server_name: abc.tld
-      access_log: /var/log/nginx/access.tld.example.log
-      error_log: /var/log/nginx/error.tld.example.log
-      root: /home/user/project/public
-      try_files: '$uri /$uri /index.php$is_args$args'
-      index: index.php
-      
-      # SSL configuration
-      ssl:
-        enabled: 'off'
-        cert: /etc/letsencrypt/exmple.tld/fullchain.pem
-        key: /etc/letsencrypt/exmple.tld/privkey.pem
-      
-      # Locations
-      locations:
-        - default:
-            location: \
-            try_files: $uri /$uri /index.php$is_args$args;
-        - project:
-            location: '~ \.php$'
-            fastcgi:
-              pass: unix:/var/run/php.sock
-              index: index.php
-              include_conf: fastcgi.conf;
-            additional_conf: |
-              fastcgi_read_timeout 3600;
-              fastcgi_param APPLICATION_ENV development;
-              
-      # Addition configuration
-      additional_conf: ""
+# Managed virtual hosts configuration
+nginx_vhosts: 
+  #
+  # Virtual host: Example
+  #
+  - name: example
+    filename: tld.example
+    state: present
+
+    # Redirection to https (optional)
+    redirect:
+      listen: 1.2.3.4:80
+      server_name: example.tld
+      target: https://example.tld
+
+    # Basic config
+    listen: 1.2.3.4:443 ssl http2
+    server_name: example.tld
+    access_log: /var/log/nginx/nginx-access.log
+    error_log: /var/log/nginx/nginx-error.log
+    root: /home/example/htdocs
+    try_files: '$uri /$uri /index.php$is_args$args'
+    index: index.php
+
+    # SSL support (optional)
+    ssl:
+      enabled: 'off'
+      # When provided it will copy the folder to the destination
+      src_dir: ../files/certificates/my_cert_dir
+      dest_dir: /etc/ssl
+      cert: /etc/ssl/my_cert_dir/my.crt
+      key: /etc/ssl/my_cert_dir/my.key
+
+    # Locations for the vhost
+    locations:
+      - name: default
+        location: /
+        try_files: $uri /$uri /index.php$is_args$args
+      - name: php
+        location: '~ \.php$'
+        fastcgi:
+          pass: "unix:/var/run/php/php8.2-fpm-example.sock"
+          index: index.php
+          include_conf: fastcgi.conf
+        additional_conf: |
+          {% filter indent(width=8, first=false) %}
+          fastcgi_read_timeout 3600;
+          fastcgi_param APPLICATION_ENV production;
+          fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+          fastcgi_param DOCUMENT_ROOT $realpath_root;
+          {% endfilter %}
+
+    # Additional configuration
+    additional_conf: |
+      {% filter indent(width=8, first=false) %}
+      client_max_body_size 32M;
+      {% endfilter %}
+
 ```
 
 Dependencies
