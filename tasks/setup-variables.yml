@@ -10,6 +10,11 @@
     nginx_package: "{{ __nginx_package }}"
   when: nginx_package is not defined
 
+- name: FACTS - Define NGINX extras package
+  set_fact:
+    nginx_extras_package: "{{ __nginx_extras_package }}"
+  when: nginx_extras_package is not defined
+
 - name: FACTS - Define NGINX conf directory
   set_fact:
     nginx_conf_dir: "{{ __nginx_conf_dir }}"

@@ -6,6 +6,8 @@
 # Nginx package should be installed
 nginx_enabled: false
 
+nginx_extras_enabled: false
+
 # Latest will install and update to latest versions, present will not update
 nginx_packages_mode: present # present|latest
 
@@ -84,6 +86,11 @@ nginx_clear_vhosts_first: false
 # Removal of the default vhost shipped with nginx
 nginx_remove_default_vhost: false
 
+nginx_copy_ssl_certificates: true
+
+# Enable usage of cors headers
+nginx_cors_enabled: false
+
 # Managed virtual hosts configuration
 nginx_vhosts: []
 #  #
@@ -117,6 +124,10 @@ nginx_vhosts: []
 #      cert: /etc/ssl/my_cert_dir/my.crt
 #      key: /etc/ssl/my_cert_dir/my.key
 #
+#    cors:
+#      allowed_origins:
+#        - '~^https?://(.*\.)?example.tld(:\d+)?$' # Any subdomain of example.tld
+#
 #    # Locations for the vhost
 #    locations:
 #      - name: default
@@ -131,7 +142,7 @@ nginx_vhosts: []
 #        additional_conf: |
 #          {% filter indent(width=8, first=false) %}
 #          fastcgi_read_timeout 3600;
-#          fastcgi_param APPLICATION_ENV production;
+#          fastcgi_param ENVIRONMENT production;
 #          fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
 #          fastcgi_param DOCUMENT_ROOT $realpath_root;
 #          {% endfilter %}

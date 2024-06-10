@@ -6,6 +6,9 @@
 # Nginx apt package
 __nginx_package: nginx
 
+# Nginx extras package
+__nginx_extras_package: nginx-extras
+
 # Default path to nginx conf directory
 __nginx_conf_dir: /etc/nginx/conf.d
 

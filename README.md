@@ -141,7 +141,7 @@ nginx_vhosts:
         additional_conf: |
           {% filter indent(width=8, first=false) %}
           fastcgi_read_timeout 3600;
-          fastcgi_param APPLICATION_ENV production;
+          fastcgi_param ENVIRONMENT production;
           fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
           fastcgi_param DOCUMENT_ROOT $realpath_root;
           {% endfilter %}

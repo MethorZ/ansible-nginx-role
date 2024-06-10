@@ -39,10 +39,19 @@ server {
 {% if item.index is defined %}
     index {{ item.index }};
 {% endif %}
+{% if item.cors.allow_origins is defined and item.cors.allow_origins %}
+    more_set_headers 'Access-Control-Allow-Origin: $allowed_origin';
+{% endif %}
+{% if item.cors.allow_credentials is defined and item.cors.allow_credentials %}
+    more_set_headers 'Access-Control-Allow-Credentials: true';
+{% endif %}
 
 {% if item.locations is defined %}
 {% for entry in item.locations %}
     location {{ entry.location }} {
+{% if entry.cors_conf is defined %}
+    {{ entry.cors_conf }}
+{% endif %}
 {% if entry.try_files is defined %}
         try_files {{ entry.try_files }};
 {% endif %}
@@ -61,9 +70,9 @@ server {
         {{ entry.additional_conf }}
 {% endif %}
     }
+
 {% endfor %}
 {% if item.additional_conf is defined %}
-
     {{ item.additional_conf }}
 {% endif %}
 {% endif %}

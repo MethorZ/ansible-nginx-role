@@ -48,6 +48,8 @@
       group: root
       mode: '0755'
     with_items: "{{ nginx_vhosts }}"
+    notify: reload nginx
+    when: nginx_copy_ssl_certificates
 
   - name: TEMPLATE | Create enabled vhosts
     template:

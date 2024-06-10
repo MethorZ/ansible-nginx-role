@@ -10,6 +10,39 @@ events {
     multi_accept {{ nginx_multi_accept }};
 }
 
+{% if nginx_streams is defined %}
+stream {
+{% if nginx_streams.maps is defined %}
+{% for map in nginx_streams.maps %}
+
+    map {{ map.source }} {{ map.dest }} {
+{% for entry in map.entries %}
+        {{ entry }};
+{% endfor %}
+    }
+{% endfor %}
+{% endif %}
+{% if nginx_streams.upstreams is defined %}
+{% for upstream in nginx_streams.upstreams %}
+
+    upstream {{ upstream.source }} {
+        server {{ upstream.dest }};
+    }
+{% endfor %}
+{% endif %}
+{% if nginx_streams.servers is defined %}
+{% for server in nginx_streams.servers %}
+
+    server {
+        listen {{ server.listen }};
+        ssl_preread {{ server.ssl_preread }};
+        proxy_pass {{ server.proxy_pass }};
+    }
+{% endfor %}
+{% endif %}
+}
+{% endif %}
+
 http {
 
     ##
@@ -64,6 +97,22 @@ http {
     # gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
 
     {{ nginx_extra_http_options }}
+{% if nginx_cors_enabled %}
+
+    ##
+    # CORS config
+    ##
+
+    # Map the allowed frontend CORS origins to the $allowed_origin variable
+    map $http_origin $allowed_origin {
+{% if nginx_cors.allowed_origins is defined %}
+{% for origin in nginx_cors.allowed_origins %}
+        "{{ origin }}" "$http_origin";
+{% endfor %}
+{% endif %}
+        default "";
+    }
+{% endif %}
 
     ##
     # Virtual Host Configs
