@@ -40,7 +40,11 @@ server {
     index {{ item.index }};
 {% endif %}
 {% if item.cors.allow_origins is defined and item.cors.allow_origins %}
+{% if item.cors.allow_origins == "*" %}
+    more_set_headers 'Access-Control-Allow-Origin: *';
+{% else %}
     more_set_headers 'Access-Control-Allow-Origin: $allowed_origin';
+{% endif %}
 {% endif %}
 {% if item.cors.allow_credentials is defined and item.cors.allow_credentials %}
     more_set_headers 'Access-Control-Allow-Credentials: true';
